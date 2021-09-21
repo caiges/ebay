@@ -1,8 +1,8 @@
 //! Fulfillment API
 //! [Doc](https://developer.ebay.com/api-docs/sell/fulfillment/overview.html)
 
-use client::*;
-use result::EbayResult;
+use crate::client::*;
+use crate::result::EbayResult;
 
 pub mod order;
 
@@ -31,7 +31,7 @@ pub trait FulfillmentApi {
 
 impl FulfillmentApi for EbayClient {
   fn get_orders(&self, params: &GetOrdersParams) -> EbayResult<OrderSearchPagedCollection> {
-    let mut b = self.request(Method::Get, "/sell/fulfillment/v1/order")?;
+    let mut b = self.request(Method::GET, "/sell/fulfillment/v1/order")?;
     b.query(params);
     if let Some(ref ids) = params.order_ids {
       b.query(&[("orderIds", ids.join(",") as String)]);
@@ -41,7 +41,7 @@ impl FulfillmentApi for EbayClient {
 
   fn get_order(&self, id: &str) -> EbayResult<Order> {
     self
-      .request(Method::Get, &format!("/sell/fulfillment/v1/order/{}", id))?
+      .request(Method::GET, &format!("/sell/fulfillment/v1/order/{}", id))?
       .send()?
       .get_response()
   }
@@ -52,7 +52,7 @@ impl FulfillmentApi for EbayClient {
   ) -> EbayResult<ShippingFulfillmentPagedCollection> {
     self
       .request(
-        Method::Get,
+        Method::GET,
         &format!(
           "/sell/fulfillment/v1/order/{}/shipping_fulfillment",
           order_id
@@ -65,7 +65,7 @@ impl FulfillmentApi for EbayClient {
   fn get_shipping_fulfillment(&self, order_id: &str, id: &str) -> EbayResult<ShippingFulfillment> {
     self
       .request(
-        Method::Get,
+        Method::GET,
         &format!(
           "/sell/fulfillment/v1/order/{}/shipping_fulfillment/{}",
           order_id, id
@@ -80,10 +80,10 @@ impl FulfillmentApi for EbayClient {
     order_id: &str,
     details: &ShippingFulfillmentDetails,
   ) -> EbayResult<String> {
-    use reqwest::header::Location;
+    use reqwest::header::LOCATION;
     let mut res = self
       .request(
-        Method::Post,
+        Method::POST,
         &format!(
           "/sell/fulfillment/v1/order/{}/shipping_fulfillment",
           order_id
@@ -96,7 +96,7 @@ impl FulfillmentApi for EbayClient {
 
     let location = res
       .headers()
-      .get::<Location>()
+      .get::<LOCATION>()
       .and_then(|location| location.split('/').last().map(str::to_string))
       .ok_or_else(|| "Location header was not found".to_owned())?;
 

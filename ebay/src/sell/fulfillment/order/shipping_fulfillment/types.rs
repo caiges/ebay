@@ -1,6 +1,6 @@
+use crate::types::EbayDateTime;
 use chrono::{DateTime, Utc};
 use serde_json::Value;
-use types::EbayDateTime;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct ShippingFulfillment {

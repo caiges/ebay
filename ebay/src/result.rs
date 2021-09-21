@@ -1,5 +1,5 @@
+use crate::trading::types::Error as TradingApiError;
 use reqwest::StatusCode;
-use trading::types::Error as TradingApiError;
 
 #[derive(Fail, Debug)]
 pub enum EbayError {

@@ -1,4 +1,4 @@
-use reqwest::header::Headers;
+use reqwest::header::{HeaderMap, HeaderValue};
 use reqwest::RequestBuilder;
 
 const EBAY_API_COMPATIBILITY_LEVEL: &'static str = "967";
@@ -10,15 +10,21 @@ pub trait AddTradingApiHeaders {
 
 impl AddTradingApiHeaders for RequestBuilder {
   fn add_trading_api_headers(&mut self, call_name: &str) -> &mut Self {
-    let mut headers = Headers::new();
-    headers.set_raw(
+    let mut headers = HeaderMap::new();
+    headers.insert(
       "X-EBAY-API-COMPATIBILITY-LEVEL",
-      EBAY_API_COMPATIBILITY_LEVEL,
+      HeaderValue::from_static(EBAY_API_COMPATIBILITY_LEVEL),
     );
-    headers.set_raw("X-EBAY-API-CALL-NAME", call_name.to_owned());
-    headers.set_raw("X-EBAY-API-SITEID", EBAY_API_SITEID);
-    headers.set_raw("Accept", "xml");
-    headers.set_raw("Content-Type", "application/xml");
-    self.headers(headers)
+    headers.insert(
+      "X-EBAY-API-CALL-NAME",
+      HeaderValue::from_static(&call_name.to_owned()[..]),
+    );
+    headers.insert(
+      "X-EBAY-API-SITEID",
+      HeaderValue::from_static(EBAY_API_SITEID),
+    );
+    headers.insert("Accept", HeaderValue::from_static("xml"));
+    headers.insert("Content-Type", HeaderValue::from_static("application/xml"));
+    &mut self.headers(headers)
   }
 }

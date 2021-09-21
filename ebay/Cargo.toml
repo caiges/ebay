@@ -4,11 +4,12 @@ version = "0.2.2"
 authors = ["fluxxu <fluxxu@gmail.com>"]
 description = "eBay API client for Rust."
 license = "MIT"
+edition = "2018"
 
 [dependencies]
 ebay_derive = "0.2"
 chrono = { version = "0.4.0", features = ["serde"] }
-reqwest = "0.8.2"
+reqwest = { version = "0.11.4", features = ["json"] }
 url = "1.6.0"
 failure = "0.1.2"
 failure_derive = "0.1.2"

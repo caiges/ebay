@@ -2,9 +2,9 @@
 //! [Doc](https://developer.ebay.com/api-docs/static/oauth-refresh-token-request.html)
 
 use super::Credential;
+use crate::result::EbayResult;
+use crate::utils::read_ebay_response;
 use reqwest::Client;
-use result::EbayResult;
-use utils::read_ebay_response;
 
 #[derive(Debug)]
 pub struct Refresh<'a> {
@@ -35,11 +35,13 @@ impl<'a> Refresh<'a> {
       .basic_auth(
         &self.credential.client_id as &str,
         Some(&self.credential.client_secret as &str),
-      ).form(&Form {
+      )
+      .form(&Form {
         grant_type: "refresh_token",
         refresh_token,
         scope: self.scopes.join(" "),
-      }).send()?;
+      })
+      .send()?;
 
     check_resp!(resp);
 

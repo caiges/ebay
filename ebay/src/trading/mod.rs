@@ -1,6 +1,6 @@
-use client::EbayClient;
+use crate::client::EbayClient;
+use crate::result::*;
 use reqwest::Method;
-use result::*;
 pub use xmltree::Element;
 
 const ENDPOINT: &'static str = "https://api.ebay.com/ws/api.dll";

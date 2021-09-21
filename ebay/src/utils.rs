@@ -1,5 +1,5 @@
+use crate::result::*;
 use reqwest::Response;
-use result::*;
 use serde::Deserialize;
 use serde_json;
 
@@ -7,7 +7,8 @@ use serde_json;
 #[macro_export]
 macro_rules! check_resp {
   ($resp:expr) => {{
-    use result::EbayError;
+    extern crate self as self_crate;
+    use self_crate::result::EbayError;
     if !$resp.status().is_success() {
       let body = $resp.text()?;
       return Err(EbayError::Request {

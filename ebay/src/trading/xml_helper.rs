@@ -1,6 +1,6 @@
 use super::types::ResponseMeta;
+use crate::result::*;
 use reqwest::Response;
-use result::*;
 pub use xmltree::Element;
 
 pub trait FromXmlElement: Sized + Default {
@@ -181,7 +181,8 @@ macro_rules! ebay_xml_element {
   (
     $tag_name:ident $attrs:tt $children:tt
   ) => {{
-    use $crate::trading::Element;
+    extern crate self as self_crate;
+    use self_crate::trading::Element;
     let mut elem = Element::new(stringify!($tag_name));
     ebay_xml_element!(ATTRS elem, $attrs);
     ebay_xml_element!(CHILDREN elem, $children);

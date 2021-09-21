@@ -32,10 +32,10 @@ pub struct EbayResponse {
 impl EbayClient {
   pub fn proxy_request(&self, req: &EbayRequest) -> EbayResult<EbayResponse> {
     let method = match req.method {
-      EbayHttpMethod::Get => Method::Get,
-      EbayHttpMethod::Post => Method::Post,
-      EbayHttpMethod::Put => Method::Put,
-      EbayHttpMethod::Delete => Method::Delete,
+      EbayHttpMethod::Get => Method::GET,
+      EbayHttpMethod::Post => Method::POST,
+      EbayHttpMethod::Put => Method::PUT,
+      EbayHttpMethod::Delete => Method::DELETE,
     };
     let mut b = self.request(method, &req.path)?;
 
@@ -44,10 +44,13 @@ impl EbayClient {
     }
 
     if let Some(ref headers) = req.headers {
-      use reqwest::header::Headers;
-      let mut add = Headers::new();
+      use reqwest::header::HeaderMap;
+      let mut add = HeaderMap::new();
       for &(ref k, ref v) in headers {
-        add.set_raw(k.to_string(), v.to_string());
+        add.insert(
+          reqwest::header::HeaderName::from_static(&k.to_string()),
+          reqwest::header::HeaderValue::from_static(&v.to_string()),
+        );
       }
       b.headers(add);
     }

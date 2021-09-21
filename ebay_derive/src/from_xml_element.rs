@@ -119,7 +119,7 @@ pub fn derive(input: TokenStream) -> TokenStream {
     })
     .collect();
 
-  let output: proc_macro2::TokenStream = quote!{
+  let output: proc_macro2::TokenStream = quote! {
     impl crate::trading::FromXmlElement for #name {
       fn from_xml_element(mut elem: &crate::trading::Element) -> crate::result::EbayResult<Self> {
         Ok(
@@ -171,7 +171,7 @@ fn test_field_name_to_tag_name() {
     ],
   ];
 
-  for pair in cases.into_iter() {
+  for pair in cases.iter() {
     assert_eq!(field_name_to_tag_name(pair[0]), pair[1])
   }
 }
@@ -208,7 +208,7 @@ fn field_name_to_attr_name(field_name: &str) -> String {
 fn test_field_name_to_attr_name() {
   let cases = [["currency_id", "currencyID"]];
 
-  for pair in cases.into_iter() {
+  for pair in cases.iter() {
     assert_eq!(field_name_to_attr_name(pair[0]), pair[1])
   }
 }
